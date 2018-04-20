@@ -47,6 +47,9 @@ class ReStoreFrame : JFrame("ReStore") {
             throw IllegalArgumentException("Error in login: $e")
         }
 
+        val imageIcon = ImageIcon(javaClass.getResource("res/re_store.png"))
+        iconImage = imageIcon.image
+
 
         minimumSize = Dimension(500, 400)
 
