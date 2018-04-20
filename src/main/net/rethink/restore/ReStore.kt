@@ -6,6 +6,7 @@ import com.beust.klaxon.Klaxon
 import com.beust.klaxon.KlaxonException
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.fuel.httpPost
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -37,6 +38,26 @@ class ReStore(val config: Config) {
 
     fun login(): QueryResponse? {
         val (_, _, res) = "/api/login".httpGet().authenticate(config.username, config.password).responseString()
+        return klaxon.parse<QueryResponse>(res.get())
+    }
+
+    fun addProduct(shop_id: Int, name: String? = null, comment: String? = null, price: Float? = null): QueryResponse? {
+        val (_, _, res) = "/api/add/product/$shop_id".httpPost().body("""{"name": "$name", "comment": "$comment", "price": "$price"}""").authenticate(config.username, config.password).responseString()
+        return klaxon.parse<QueryResponse>(res.get())
+    }
+
+    fun editShop(shop_id: Int, name: String? = null, description: String? = null): QueryResponse? {
+        val (_, _, res) = "/api/edit/shop/$shop_id".httpPost().body("""{"name": "$name", "description": "$description"}""").authenticate(config.username, config.password).responseString()
+        return klaxon.parse<QueryResponse>(res.get())
+    }
+
+    fun deleteProduict(product_id: Int): QueryResponse? {
+        val (_, _, res) = "/api/delete/product/$product_id".httpPost().authenticate(config.username, config.password).responseString()
+        return klaxon.parse<QueryResponse>(res.get())
+    }
+
+    fun editProduct(product_id: Int, name: String? = null, comment: String? = null, price: Float? = null): QueryResponse? {
+        val (_, _, res) = "/api/edit/product/$product_id".httpPost().body("""{"name": "$name", "comment": "$comment", "price": "$price"}""").authenticate(config.username, config.password).responseString()
         return klaxon.parse<QueryResponse>(res.get())
     }
 
